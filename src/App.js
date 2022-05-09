@@ -1,12 +1,10 @@
 import './App.css';
-import React, {useEffect} from "react";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 function App() {
   const[messageList, setMessageList] = useState([]);
   const[author, setAuthor] = useState("");
   const[message, setMessage] = useState("");
-//comment
   let idCounter = messageList.length;
 
   useEffect(() => {
@@ -35,9 +33,7 @@ function App() {
 
         </>
     </div>
-
   );
-
 }
 
 export default App;
