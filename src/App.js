@@ -2,7 +2,11 @@ import './App.css';
 import React, {useEffect, useRef, useState} from "react";
 import {Button, TextField} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import BasicList from "./MessageList";
+import {Link, Route, Routes} from "react-router-dom";
+import Profile from "./Profile";
+import Home from './Home';
+import Chats from './Chats';
+import NotFound from "./NotFound";
 
 function App() {
     const [messageList, setMessageList] = useState([]);
@@ -21,7 +25,19 @@ function App() {
 
     return (
         <div className="App">
-                <BasicList/>
+            <header>
+                <ul>
+                    <li>
+                        <Link to='/'>Home</Link>
+                    </li>
+                    <li>
+                        <Link to='/chats'>Chats</Link>
+                    </li>
+                    <li>
+                        <Link to='/profile'>Profile</Link>
+                    </li>
+                </ul>
+            </header>
                 <TextField
                     id="outlined-helperText"
                     label="Author"
@@ -51,10 +67,16 @@ function App() {
                             name: author
                         }])
                     }}>Send</Button>
-
                 {messageList.map((item) =>
                     <p key={item.id}>Author: {item.author}<br/>Say: {item.text}</p>
                 )}
+            <Routes>
+                <Route index exact path='/' element={<Home/>}/>
+                <Route path='/chats' element={<Chats/>}/>
+                <Route path='/chats/:chatId' element={<Chats props={chatArray}/>}/>
+                <Route path='/profile' element={<Profile/>}/>
+                <Route path='*' element={<NotFound/>}/>
+            </Routes>
         </div>
     );
 }
