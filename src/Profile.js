@@ -1,9 +1,11 @@
 import React from 'react';
+import Counter from "./counter";
 
 const Profile = () => {
     return (
         <div>
-            <p>Hi there!</p>
+            <h2>Hi there!</h2>
+            <Counter/>
         </div>
     );
 };

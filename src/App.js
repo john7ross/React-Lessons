@@ -7,6 +7,12 @@ import Profile from "./Profile";
 import Home from './Home';
 import Chats from './Chats';
 import NotFound from "./NotFound";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import FolderIcon from '@mui/icons-material/Folder';
 
 function App() {
     const [messageList, setMessageList] = useState([]);
@@ -25,19 +31,12 @@ function App() {
 
     return (
         <div className="App">
-            <header>
-                <ul>
-                    <li>
+            <nav style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '30px',
+                backgroundColor:'yellowgreen', minHeight: '60px', alignItems: 'center'}}>
                         <Link to='/'>Home</Link>
-                    </li>
-                    <li>
                         <Link to='/chats'>Chats</Link>
-                    </li>
-                    <li>
                         <Link to='/profile'>Profile</Link>
-                    </li>
-                </ul>
-            </header>
+            </nav>
                 <TextField
                     id="outlined-helperText"
                     label="Author"
@@ -72,11 +71,31 @@ function App() {
                 )}
             <Routes>
                 <Route index exact path='/' element={<Home/>}/>
-                <Route path='/chats' element={<Chats/>}/>
-                <Route path='/chats/:chatId' element={<Chats props={chatArray}/>}/>
+                <Route path='/chats/' element={<Chats messages={messageList}/>}>
+                    <Route path=':id' element={<Chats messages={messageList}/>}/>
+                </Route>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='*' element={<NotFound/>}/>
             </Routes>
+
+            <List subheader={<h3>Chats List</h3>} style={{maxWidth: '360px', backgroundColor:'greenyellow'}}>
+            {chatArray.map((item) => {
+        return(
+            <>
+                <Link to={`/chats/${chatArray.indexOf(item)}`}>
+                <ListItem key={item.id} disablePadding>
+                    <FolderIcon/>
+                    <ListItemButton>
+                        <ListItemText primary={<p> №{chatArray.indexOf(item)} Name: {item.name}</p>}
+                                      secondary={<p>Chat Id: {item.id}</p>}/>
+                    </ListItemButton>
+                </ListItem>
+                </Link>
+                <Divider/>
+            </>
+        )
+    })
+}</List>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import React from 'react';
 const Home = () => {
     return (
         <div>
-            Home
+            <h2>Welcome</h2>
         </div>
     );
 };
