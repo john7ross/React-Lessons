@@ -1,11 +1,9 @@
 import React from 'react';
 
-const Home = () => {
+export const NotFound = () => {
     return (
         <div>
-            <h2>Welcome</h2>
+            <h2>Page not found</h2>
         </div>
     );
 };
-
-export default Home;
