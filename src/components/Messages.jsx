@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {messagesSelector} from "../redux/reducers/messagesReducer/selectors";
 import {useParams} from "react-router-dom";
-import {ADD_CHAT, ADD_MESSAGE, DELETE_MESSAGE} from "../redux/actions/actionTypes";
+import {addChats, addMessages, deleteMessages} from "../redux/actions/actions";
 
 export const Messages = () => {
     const {chatIds} = useParams();
@@ -10,13 +10,13 @@ export const Messages = () => {
     const messages = useSelector(messagesSelector);
     const [inputAuthor, setInputAuthor] = useState('');
     const [inputMessage, setInputMessage] = useState('');
-    const message = messages.filter(() => {
+    const message = messages.filter((message) => {
         if(!chatIds)
             return true;
         return message.chatId ===+chatIds;
     });
     const deleteMessage = (id) => {
-        dispatch({type: DELETE_MESSAGE, payload: id})
+        dispatch(deleteMessages(id))
     };
     const addMessage = () => {
         const random = Math.random();
@@ -30,9 +30,8 @@ export const Messages = () => {
             id: messages.length,
             name: inputAuthor
         };
-        console.log(chatIds);
-        dispatch({type: ADD_MESSAGE, payload: mess});
-        dispatch({type: ADD_CHAT, payload: chatAdd})
+        dispatch(addMessages(mess));
+        dispatch(addChats(chatAdd))
     };
     return (
         <div>

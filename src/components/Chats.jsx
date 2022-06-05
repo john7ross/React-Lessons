@@ -2,14 +2,14 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {chatsSelector} from "../redux/reducers/chatsReducer/selectors";
-import {DELETE_CHAT, DELETE_MESSAGE_WITH_CHAT} from "../redux/actions/actionTypes";
+import {deleteChats, deleteChatsWithMessages} from "../redux/actions/actions";
 
 export const Chats = () => {
     const chats = useSelector(chatsSelector);
     const dispatch = useDispatch();
     const deleteChat = (id) => {
-        dispatch({type: DELETE_CHAT, payload: id})
-        dispatch({type: DELETE_MESSAGE_WITH_CHAT, payload: id})
+        dispatch(deleteChats(id));
+        dispatch(deleteChatsWithMessages(id))
     };
 
     return (
