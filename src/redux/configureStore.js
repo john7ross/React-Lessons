@@ -2,6 +2,8 @@ import {applyMiddleware, combineReducers, createStore} from "redux";
 import {chatsReducer} from "./reducers/chatsReducer/chatsReducer";
 import {messagesReducer} from "./reducers/messagesReducer/messagesReducer";
 import {createLogger} from "redux-logger/src";
+import {userReducer} from "./reducers/userReducer/userReducer";
+import thunk from "redux-thunk";
 
 const confirmDeleteMessage = store => next => action => {
     const delay = action?.meta?.delay;
@@ -15,15 +17,16 @@ const confirmDeleteMessage = store => next => action => {
     }, delay);
 
    return () => clearTimeout(timeOut);
-}
+};
 
 const logger = createLogger({
     diff: true,
     collapsed: true
-})
+});
 
 export const store = createStore(combineReducers({
     chats: chatsReducer,
-    messages: messagesReducer}
-    ), applyMiddleware(confirmDeleteMessage, logger)
+    messages: messagesReducer,
+    users: userReducer}
+    ), applyMiddleware(thunk, confirmDeleteMessage, logger)
 );
