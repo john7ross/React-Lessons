@@ -1,44 +1,78 @@
-import {
-    ADD_CHAT,
-    ADD_MESSAGE,
-    DELETE_CHAT,
-    DELETE_MESSAGE,
-    DELETE_MESSAGE_WITH_CHAT,
-    ERROR,
-    LOAD_USERS, LOADING
-} from "./actionTypes";
+import * as types from "./actionTypes";
+import {auth} from "../../firebase";
 
-export const deleteMessages = (id) => ({
-    type: DELETE_MESSAGE, payload: id, meta: {
-            delay: 1500
-        }
+export const registerStart = () => ({
+    type: types.REGISTER_START
 });
 
-export const addMessages = (mess) => ({
-    type: ADD_MESSAGE, payload: mess
+export const registerSuccess = (user) => ({
+    type: types.REGISTER_SUCCESS,
+    payload: user
 });
 
-
-export const addChats = (chat) => ({
-    type: ADD_CHAT, payload: chat
+export const registerError = (e) => ({
+    type: types.REGISTER_ERROR,
+    payload: e
 });
 
-export const deleteChats = (chatId) => ({
- type: DELETE_CHAT, payload: chatId
+export const loginStart = () => ({
+    type: types.LOGIN_START
 });
 
-export const deleteChatsWithMessages = (chatId) => ({
-    type: DELETE_MESSAGE_WITH_CHAT, payload: chatId
+export const loginSuccess = (user) => ({
+    type: types.LOGIN_SUCCESS,
+    payload: user
 });
 
-export const loadUsersAction = (data) => ({
-    type: LOAD_USERS, payload: data
+export const loginError = (e) => ({
+    type: types.LOGIN_ERROR,
+    payload: e
 });
 
-export const loadingAction = () => ({
-    type: LOADING
+export const logoutStart = () => ({
+    type: types.LOGOUT_START
 });
 
-export const errorAction = (e) => ({
-    type: ERROR, payload: e
+export const logoutSuccess = () => ({
+    type: types.LOGOUT_SUCCESS
 });
+
+export const logoutError = () => ({
+    type: types.LOGOUT_ERROR
+});
+
+export const registerInitiate = (email, password, userName) => {
+    return(dispatch) => {
+        dispatch(registerStart());
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .then(({ user }) => {
+                user.updateProfile({
+                    userName
+                })
+                dispatch(registerSuccess(user))
+            })
+            .catch((err) => dispatch(registerError(err.message)))
+    }
+}
+export const loginInitiate = (email, password) => {
+    return(dispatch) => {
+        dispatch(loginStart())
+        auth
+            .signInWithEmailAndPassword(email, password)
+            .then(({ user }) => {
+                dispatch(loginSuccess(user))
+            })
+            .catch((e) => dispatch(loginError(e.message)))
+    }
+}
+export const logoutInitiate = () => {
+    return(dispatch) => {
+        dispatch(logoutStart())
+        auth
+            .signOut()
+            .then((resp) => dispatch(logoutSuccess()))
+            .catch((e) => dispatch(logoutError(e.message)))
+    }
+}
+

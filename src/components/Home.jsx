@@ -1,45 +1,30 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {errorSelector, loadingSelector, usersSelector} from "../redux/reducers/userReducer/selectors";
-import {loadUsers} from "../redux/reducers/userReducer/userReducer";
+import {userSelector} from "../redux/reducers/userReducer/selectors";
+import {logoutInitiate} from "../redux/actions/actions";
+import {useNavigate} from "react-router-dom";
 
-export const Home = () => {
-    const users = useSelector(usersSelector);
-    const loading = useSelector(loadingSelector);
-    const error = useSelector(errorSelector);
+const Home = () => {
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        dispatch(loadUsers())
-    }, []);
 
-    const errorHandler = () => {
-        dispatch(loadUsers())
-    };
 
-    if(loading) {
-        return (
-            <h3>Loading, please wait... </h3>
-        )
+    const handleAuth = () => {
+        if(user) {
+            dispatch(logoutInitiate())
+        }
+        setTimeout(() => {
+            navigate('/login')
+        }, 3000)
     }
-
-    if(error) {
-        return (
-            <div>
-                <h3>Ouch, we take error, repeat? </h3>
-                <button onClick={errorHandler}>Repeat</button>
-            </div>
-        )
-    }
-
     return (
         <div>
-            <h2>Welcome</h2>
-            {users.map((user) =>
-                <div key={user.id}>
-                    {user.name}
-                </div>
-            )}
+            <h2>Home</h2>
+            <button onClick={handleAuth}>Выйти</button>
         </div>
     );
 };
+
+export default Home;

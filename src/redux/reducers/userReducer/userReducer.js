@@ -1,47 +1,42 @@
-import {ERROR, LOAD_USERS, LOADING} from "../../actions/actionTypes";
-import {errorAction, loadingAction, loadUsersAction} from "../../actions/actions";
+import * as types from "redux/actions/actionTypes";
+
 
 const initialState = {
-    users: [],
+    currentUser: null,
     loading: false,
     error: null
 };
 
 export const userReducer = (state = initialState, action) => {
     switch (action.type) {
-        case LOADING:
+        case types.REGISTER_START:
+        case types.LOGOUT_START:
+        case types.LOGIN_START:
             return {
                 ...state,
                 loading: true
-            };
-
-        case LOAD_USERS:
-            return {
-                ...state,
-                users: action.payload,
-                loading: false
-            };
-        case ERROR:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
             }
-
+        case types.LOGOUT_SUCCESS:
+            return {
+                ...state,
+                currentUser: null
+            }
+        case types.REGISTER_SUCCESS:
+        case types.LOGIN_SUCCESS:
+            return {
+                ...state,
+                currentUser: action.payload,
+                loading: false
+            }
+        case types.REGISTER_ERROR:
+        case types.LOGIN_ERROR:
+        case types.LOGOUT_ERROR:
+            return {
+                ...state,
+                error: action.payload,
+                loading: false
+            }
         default:
-            return state;
-    }
-}
-
-export const loadUsers = () => {
-    return async dispatch => {
-       dispatch(loadingAction());
-       try{
-           const response = await fetch("https://jsonplaceholder.typicode.com/users");
-           const data = await response.json();
-           dispatch (loadUsersAction(data))
-       } catch (e) {
-           dispatch(errorAction(e));
-       }
+            return state
     }
 }
